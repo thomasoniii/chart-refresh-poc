@@ -80,7 +80,7 @@ Of course, we could also write a helper function to wrapper the original action 
 interface is unchanged. Maybe something like this, which I just dashed off and did not test:
 
 function makeRefreshableAction( actionCreator, condition = () => true ) {
-  return (...args) {
+  return (...args) => {
     dispatchActionAndRefresh(
       actionCreator(args),
       condition
