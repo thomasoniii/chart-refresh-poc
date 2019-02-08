@@ -39,8 +39,7 @@ function* refreshAllCharts(action) {
   const state = yield select();
   const charts = state.charts;
 
-  for (const chart_id of Object.keys(charts)) {
-    const chart = charts[chart_id];
+  for (const chart of Object.values(charts)) {
     yield put( setDate( chart.id, Date.now() ) )
   }
 }
@@ -62,8 +61,7 @@ function* refreshChartsOfType(action) {
   const state = yield select();
   const charts = state.charts;
 
-  for (const chart_id of Object.keys(charts)) {
-    const chart = charts[chart_id];
+  for (const chart of Object.values(charts)) {
     if ( chart.type === chartType ) {
       yield put( setDate( chart.id, Date.now() ) )
     }
@@ -107,8 +105,7 @@ function* dispatchActionAndRefresh(wrappedAction) {
   const state = yield select();
   const charts = state.charts;
 
-  for (const chart_id of Object.keys(charts)) {
-    const chart = charts[chart_id];
+  for (const chart of Object.values(charts)) {
     if ( condition(chart) ) {
       yield put( setDate( chart.id, Date.now() ) )
     }
