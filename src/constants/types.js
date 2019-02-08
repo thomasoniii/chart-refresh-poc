@@ -11,3 +11,6 @@ export const SET_TYPE                     = 'SET_TYPE';
 export const SET_NAME                     = 'SET_NAME';
 
 export const JUNK_ACTION                  = 'JUNK_ACTION';
+export const FETCH_NEW_DATA               = 'FETCH_NEW_DATA';
+export const RETICULATE_SPLINES           = 'RETICULATE_SPLINES';
+export const INITIALIZE_FLUX_CAPACITOR    = 'INITIALIZE_FLUX_CAPACITOR';

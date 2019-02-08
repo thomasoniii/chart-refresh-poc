@@ -4,6 +4,9 @@ import {
   REFRESH_CHARTS,
   REFRESH_CHARTS_OF_TYPE,
   DISPATCH_ACTION_AND_REFRESH,
+  FETCH_NEW_DATA,
+  RETICULATE_SPLINES,
+  INITIALIZE_FLUX_CAPACITOR,
 } from '../constants/types';
 
 import {
@@ -14,6 +17,8 @@ import {
   Okay, so here's where I'll try to explain my though process. First of all, the
   action being "REFRESH_CHARTS" is arbitrary. Any action that'd cause all the charts
   to refresh could go in here and call the refreshAllCharts function to call them all.
+  A couple of example alternative actions are provided here - as more get added, we just
+  add 'em into the yield all here.
 
   Note that for demo purposes "refreshing" a chart just consists of setting its date to
   NOW, whereas in actuality we'd want to do something more complicated.
@@ -22,6 +27,9 @@ import {
 export default function* chartsSaga() {
   yield all([
     takeEvery( REFRESH_CHARTS,              refreshAllCharts ),
+    takeEvery( FETCH_NEW_DATA,              refreshAllCharts ),
+    takeEvery( RETICULATE_SPLINES,          refreshAllCharts ),
+    takeEvery( INITIALIZE_FLUX_CAPACITOR,   refreshAllCharts ),
     takeEvery( REFRESH_CHARTS_OF_TYPE,      refreshChartsOfType ),
     takeEvery( DISPATCH_ACTION_AND_REFRESH, dispatchActionAndRefresh )
   ])
