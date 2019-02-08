@@ -45,7 +45,8 @@ export default (state = INITIAL, action) => {
       return newState;
     }
     case JUNK_ACTION : {
-      console.log("A junk action was run. Nothing happens.");
+      const { name, type } = action.payload;
+      console.log(`A junk action with name "${name}" of type "${type}" was run. Nothing happens.`);
       return state;
     }
     default :

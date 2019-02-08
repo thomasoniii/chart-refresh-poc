@@ -119,23 +119,9 @@ action is confusing, I agree. Same issue as up above. Anyway, this saga will jus
 dispatch whatever action it was handed, and then iterate through the charts and check to see
 if they match the condition. If so, we refresh, and if not we skip it.
 
-Of course, we could also write a helper function to wrapper the original action creator so its
-interface is unchanged. Maybe something like this, which I just dashed off and did not test:
-
-function makeRefreshableAction( actionCreator, condition = () => true ) {
-  return (...args) => {
-    dispatchActionAndRefresh(
-      actionCreator(...args),
-      condition
-    )
-  }
-}
-
-and then:
-
-const refreshableActionCreator = makeRefreshableAction(actionCreator, condition);
-
-to get a drop in replacement for actionCreator. Assuming I dashed off the function properly, of course. :-)
+There's also a wrapper function for this in utilities/actions, which maintains the interface
+of the original action creator and ensures that you don't need to keep handing through the
+conditional function all over the place.
 
 Honestly? I don't like this approach. It feels overly generic without a strong immediate need. On the other hand,
 it's very future proofed. It's also virtually the same as what we've already got. But hey, it's in a saga, so it's

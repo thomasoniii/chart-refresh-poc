@@ -4,8 +4,26 @@ import './App.css';
 
 import Chart from '../Chart';
 
-import { createChart, refreshCharts, refreshChartsOfType, refreshChartsViaTypeMap, dispatchActionAndRefresh, junkAction } from '../../actions';
+import { createChart, refreshCharts, refreshChartsOfType, refreshChartsViaTypeMap, junkAction as unwrappedJunkAction } from '../../actions';
 import { getSortedCharts } from '../../selectors';
+import { makeRefreshableAction } from '../../utilities/actions';
+
+/* Alternatively, you could import dispatchActionAndRefresh, add it via mapDispatchToProps and call it this way:
+
+this.props.dispatchActionAndRefresh(
+  junkAction('junk', 'useless'),
+  (chart) => { return Date.now() - chart.date > 15 * 1000 }
+)
+
+But by using makeRefreshableAction, you maintain the interface to the original action and transparently
+dispatch a refresh to the charts based upon the matching condition.
+
+*/
+
+const junkAction = makeRefreshableAction(
+  unwrappedJunkAction,
+  (chart) => { return Date.now() - chart.date > 15 * 1000 }
+);
 
 class App extends Component {
 
@@ -40,10 +58,12 @@ class App extends Component {
   }
 
   refreshStaleCharts() {
-    this.props.dispatchActionAndRefresh(
+    this.props.junkAction('junk', 'useless');
+    // or, if you didn't use makeRefreshableAction:
+    /*this.props.dispatchActionAndRefresh(
       junkAction('junk', 'useless'),
       (chart) => { return Date.now() - chart.date > 15 * 1000 }
-    )
+    )*/
   }
 
   render() {
@@ -90,4 +110,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect( mapStateToProps, { createChart, refreshCharts, refreshChartsOfType, refreshChartsViaTypeMap, dispatchActionAndRefresh } )( App );
+export default connect( mapStateToProps, { createChart, refreshCharts, refreshChartsOfType, refreshChartsViaTypeMap, junkAction } )( App );
