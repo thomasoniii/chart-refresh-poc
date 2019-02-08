@@ -4,6 +4,7 @@ import {
 
   REFRESH_CHARTS,
   REFRESH_CHARTS_OF_TYPE,
+  REFRESH_CHARTS_VIA_TYPEMAP,
 
   DISPATCH_ACTION_AND_REFRESH,
 
@@ -14,9 +15,20 @@ import {
   JUNK_ACTION,
 } from '../constants/types';
 
+let nextChartID = 0;
+
+const chartTypes = ['Type A', 'Type B', 'Type C', 'Type D', 'Type E', 'Type F'];
+
 export const createChart = () => {
+  const id = nextChartID++;
   return {
-    type : CREATE_CHART
+    type : CREATE_CHART,
+    payload : {
+              id,
+              name : 'New chart',
+              type : chartTypes[ Math.floor(Math.random() * chartTypes.length) ],
+              date : Date.now(),
+            }
   }
 };
 
@@ -32,12 +44,20 @@ export const refreshCharts = () => {
   }
 };
 
+export const refreshChartsViaTypeMap = (chartType) => {
+  return {
+    type    : REFRESH_CHARTS_VIA_TYPEMAP,
+    payload : { chartType }
+  }
+};
+
 export const refreshChartsOfType = (chartType) => {
   return {
     type    : REFRESH_CHARTS_OF_TYPE,
     payload : { chartType }
   }
 };
+
 
 export const dispatchActionAndRefresh = (action, condition) => {
   return {

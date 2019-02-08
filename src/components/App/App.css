@@ -3,16 +3,6 @@
   grid-template-columns: 25% 25%;
 }
 
-.notes {
-  grid-column-start : 1;
-}
-
-.charts {
-  grid-column-start : 2;
-  grid-row-start : 1;
-  grid-row-end: span 2;
-}
-
 ul.controls {
   list-style-type: none;
   padding : 0;

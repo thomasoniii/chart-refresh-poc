@@ -3,6 +3,7 @@ import { all, put, takeEvery, select } from 'redux-saga/effects';
 import {
   REFRESH_CHARTS,
   REFRESH_CHARTS_OF_TYPE,
+  REFRESH_CHARTS_VIA_TYPEMAP,
   DISPATCH_ACTION_AND_REFRESH,
   FETCH_NEW_DATA,
   RETICULATE_SPLINES,
@@ -31,6 +32,7 @@ export default function* chartsSaga() {
     takeEvery( RETICULATE_SPLINES,          refreshAllCharts ),
     takeEvery( INITIALIZE_FLUX_CAPACITOR,   refreshAllCharts ),
     takeEvery( REFRESH_CHARTS_OF_TYPE,      refreshChartsOfType ),
+    takeEvery( REFRESH_CHARTS_VIA_TYPEMAP,  refreshChartsOfTypeUsingTypeMap ),
     takeEvery( DISPATCH_ACTION_AND_REFRESH, dispatchActionAndRefresh )
   ])
 }
@@ -73,6 +75,39 @@ function* refreshChartsOfType(action) {
     if ( chart.type === chartType ) {
       yield put( setDate( chart.id, Date.now() ) )
     }
+  }
+}
+
+/* This is the hyperdrive version of the above. The earlier method iterates over all of
+the charts and does a comparison to see if they match the chart type (or whatever other key
+we're using, in a different method). It's easy to implement, but it's relatively slow. Consider
+if we've got 100 charts on the page and need to look through the whole list just to see that 1
+or 2 charts need to be refreshed. It's not going to be brutally slow since it's just a loop and
+most users probably wouldn't have a "lot" of charts on a page, but we're supposed to be high performance,
+right?
+
+So this one uses an extra slice in the redux store that just maps type -> array of chart IDs (in this case),
+so when we come back in it can look up only the chart IDs that match the given type and iterate on them.
+
+My assumption is that most of the time this isn't going to be worthwhile, since the difference between iterating
+over 10 charts and doing a simple conditional vs 3 charts and not checking anything is going to be trivial.
+
+But 50 charts? 100? A more complicated condition? Then it could pay off.
+
+We could also look into stuffing this into a selector of some sort if the conditional logic to see if a chart
+should be refreshed is more complicated.
+
+*/
+
+function* refreshChartsOfTypeUsingTypeMap(action) {
+  const { chartType } = action.payload;
+  const state = yield select();
+  const { typeMap } = state;
+
+  const chartIDs = typeMap[chartType];
+
+  for (const id of chartIDs) {
+    yield put( setDate( id, Date.now() ) )
   }
 }
 

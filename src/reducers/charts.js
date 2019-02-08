@@ -11,22 +11,13 @@ import {
 
 const INITIAL = {};
 
-let nextChartID = 0;
-
-const chartTypes = ['Type A', 'Type B', 'Type C', 'Type D', 'Type E', 'Type F'];
-
 export default (state = INITIAL, action) => {
   switch(action.type) {
     case CREATE_CHART : {
-      const id = nextChartID++;
+      const chart = action.payload;
       return {
         ...state,
-        [id] : {
-          id,
-          name : 'New chart',
-          type : chartTypes[ Math.floor(Math.random() * chartTypes.length) ],
-          date : Date.now(),
-        }
+        [chart.id] : chart
       }
     }
     case DELETE_CHART : {

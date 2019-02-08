@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-export const getCharts = state => state.charts;
+export const getCharts  = state => state.charts;
 
 export const getSortedCharts = createSelector(
   [getCharts],
