@@ -82,7 +82,7 @@ interface is unchanged. Maybe something like this, which I just dashed off and d
 function makeRefreshableAction( actionCreator, condition = () => true ) {
   return (...args) => {
     dispatchActionAndRefresh(
-      actionCreator(args),
+      actionCreator(...args),
       condition
     )
   }
