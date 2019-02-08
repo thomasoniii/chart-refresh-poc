@@ -1,6 +1,7 @@
 .App {
   display : grid;
   grid-template-columns: 25% 25%;
+  grid-gap: 10px;
 }
 
 ul.controls {
@@ -13,4 +14,9 @@ ul.controls button {
   height : 32px;
   margin : 5px;
   font-size : 110%;
+}
+
+.charts {
+  height : 855px;
+  overflow-y : scroll;
 }
